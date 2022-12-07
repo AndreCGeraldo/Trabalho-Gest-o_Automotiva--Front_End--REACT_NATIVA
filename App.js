@@ -1,20 +1,67 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import Context from './store/Context';
+import UserContext from './store/UserContext'
+
+import Login from './components/Login';
+import Listagem from './components/Listagem';
+import Proposta from './components/Propostas';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+  const store = { ...UserContext() }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Context.Provider value={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              title: 'App Gestão Automotiva',
+              headerStyle: {
+                backgroundColor: '#000',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Lista"
+            component={Listagem}
+            options={{
+              title: 'Listagem de Veículos (' + store.usuarioNome + ")",
+              headerStyle: {
+                backgroundColor: '#000',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Propostas"
+            component={Proposta}
+            options={{
+              title: 'Propostas do Veículo (' + store.usuarioNome + ")",
+              headerStyle: {
+                backgroundColor: '#000',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Context.Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
